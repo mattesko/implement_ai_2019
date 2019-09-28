@@ -2,8 +2,10 @@ import gensim
 from data.constants import sexy_words_list, violent_words_list, non_prod_words_list
 from scipy import spatial
 import numpy as np
+import os
 
-path_to_gnews_model = "data/models/GoogleNews-vectors-negative300.bin"
+CURR_WORKING_DIR = os.path.dirname(os.path.realpath(__file__))
+path_to_gnews_model = os.path.join(CURR_WORKING_DIR, "data", "models", "GoogleNews-vectors-negative300.bin")
 word2vec_model = gensim.models.KeyedVectors.load_word2vec_format(path_to_gnews_model, binary=True)
 
 
