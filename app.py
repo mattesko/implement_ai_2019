@@ -18,14 +18,13 @@ def handle_filter():
     sentences = (request.get_json())
 
     do_censor = [get_filter_value(sent) for sent in sentences]
+    # do_censor = [True for _ in sentences]
 
     for sentence, do_filter in zip(sentences, do_censor):
         print(f'{sentence}:\n {str(do_filter)}')
 
-    response = Response()
-    response.headers['Do-Censor'] = [str(do_censor)]
-    content = {"Do-Censor": [str(do_censor)]}
-    return jsonify(content)
+    return jsonify(do_censor)
+
 
 def _parse_html_sentences(content):
     errors = []
