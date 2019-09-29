@@ -13,7 +13,7 @@ var xhr = new XMLHttpRequest();
 var xhr_img = new XMLHttpRequest();
 
 // TODO Once the input works, get the output to remove the correct number of paragraphs/images
-let censorListParagraphs; 
+let censorListParagraphs;
 let censorListImages = [];
 let pList = [];
 let imgList = [];
@@ -31,24 +31,31 @@ console.log(imgList);
 xhr.onload = do_crazy_shit;
 xhr_img.onload = do_some_more_crazy_shit_with_photos_this_time;
 
-function do_crazy_shit() {
-    censorListParagraphs = xhr.response;
+for (var i = 0; i < pList.length; i++) {
+    blurr(paragraphs[i]);
+}
 
+function do_crazy_shit() {
+  // AI on content
+    censorListParagraphs = xhr.response;
+  // Unblur necessary
     for (var i = 0; i < pList.length; i++) {
-        if(censorListParagraphs[i]) {
-            blurr(paragraphs[i]);
+        if(! censorListParagraphs[i]) {
+            un_blurr(paragraphs[i]);
         }
     }
-
 };
 
+for (var i = 0; i < imgList.length; i++) {
+        blurrImage(images[i]);
+}
+
 function do_some_more_crazy_shit_with_photos_this_time() {
-    console.log(xhr_img);
     censorListImages = xhr_img.response;
 
     for (var i = 0; i < imgList.length; i++) {
-        if(censorListImages[i]) {
-            blurrImage(images[i]);
+        if(! censorListImages[i]) {
+            un_blurrImage(images[i]);
         }
     }
 
@@ -81,6 +88,20 @@ function blurr(elt) {
 function blurrImage(elt) {
     elt.style['filter'] = 'blur(8px)';
     elt.style['-webkit-filter'] = 'blur(8px)';
+}
+
+function un_blurr(elt) {
+    elt.style['text-decoration'] = '';
+    elt.style['color'] = '';
+    let anchors = elt.getElementsByTagName('a');
+    for(a of anchors) {
+        a.style['color'] = '';
+    }
+}
+
+function un_blurrImage(elt) {
+    elt.style['filter'] = '';
+    elt.style['-webkit-filter'] = '';
 }
 
 chrome.runtime.sendMessage({status: done}, function(response) {
