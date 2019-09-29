@@ -2,9 +2,10 @@ from flask import Flask, request, Response, jsonify
 from bs4 import BeautifulSoup
 from filters_utils import get_filter_value
 from functools import reduce
+from flask_cors import CORS
 
 app = Flask(__name__)
-
+CORS(app)
 
 @app.route('/')
 def default():
@@ -14,7 +15,8 @@ def default():
 @app.route('/filter')
 def handle_filter():
     sentences = _parse_html_sentences(request.args['block'])
-    filters = [get_filter_value(sent) for sent in sentences]
+    # filters = [get_filter_value(sent) for sent in sentences]
+    filters = [True, False]
     do_censor = reduce(lambda x, y: x and y, filters)
 
     for sentence, do_filter in zip(sentences, filters):
