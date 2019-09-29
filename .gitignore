@@ -1,6 +1,8 @@
+.DS_Store
+*.pyc
+data/*
 __pycache__
 venv/
 models/
 .idea/*
 *.ipynb
-data/

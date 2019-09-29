@@ -2,31 +2,29 @@ from flask import Flask, request, Response, jsonify
 from bs4 import BeautifulSoup
 # from filters_utils import get_filter_value
 from functools import reduce
+from flask_cors import CORS
 from google_vision import google_visions
 import ast
 
-app = Flask(__name__)
 
+app = Flask(__name__)
+CORS(app)
 
 @app.route('/')
 def default():
     return "You had me at hello"
 
 
-@app.route('/filter')
+@app.route('/filter', methods = ['POST'])
 def handle_filter():
-    sentences = _parse_html_sentences(request.args['block'])
-    # filters = [get_filter_value(sent) for sent in sentences]
-    do_censor = reduce(lambda x, y: x and y, filters)
+    sentences = (request.get_json())
+    do_censor = [get_filter_value(sent) for sent in sentences]
+    # do_censor = [True for _ in sentences]
 
-    for sentence, do_filter in zip(sentences, filters):
-        print(f'{sentence}:\n {sentence}')
+    for sentence, do_filter in zip(sentences, do_censor):
+        print(f'{sentence}:\n {str(do_filter)}')
 
-    response = Response()
-    response.headers['Do-Censor'] = [str(do_censor)]
-    content = {"Do-Censor": [str(do_censor)]}
-
-    return jsonify(content)
+    return jsonify(do_censor)
 
 
 @app.route('/img')
