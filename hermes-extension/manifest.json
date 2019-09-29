@@ -1,6 +1,6 @@
 {
-    "name": "Hermes Extension",
-    "description": "Censor",
+    "name": "Soletia Extension",
+    "description": "An extension that blurs inappropriate text and images.",
     "version": "1.0",
     "icons": {
       "128": "images/icon_128.png"
@@ -15,7 +15,7 @@
         "matches": [
           "<all_urls>"
         ],
-        "js": ["content.js", "axios.min.js"]
+        "js": ["content.js"]
       }
     ],
 
