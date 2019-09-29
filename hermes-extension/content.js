@@ -8,8 +8,10 @@ let images = document.getElementsByTagName('img');
 // Create a request to send to the backend
 var requestURL = 'http://127.0.0.1:5000/filter';
 var requestURL_fking_imgs = 'http://127.0.0.1:5000/img';
+var requestURL_resnet_imgs = 'http://127.0.0.1:5000/resnet';
 var xhr = new XMLHttpRequest();
 var xhr_img = new XMLHttpRequest();
+var xhr_resnet = new XMLHttpRequest();
 
 // TODO Once the input works, get the output to remove the correct number of paragraphs/images
 let censorListParagraphs; 
@@ -22,13 +24,12 @@ for (i = 0; i < paragraphs.length; i++){
 }
 
 for (i = 0; i < images.length; i++){
-    console.log(images[i].src);
     imgList.push(images[i].src.replace("&", "%26"));
 }
-console.log(imgList);
 
 xhr.onload = do_crazy_shit;
 xhr_img.onload = do_some_more_crazy_shit_with_photos_this_time;
+xhr_resnet.onload = do_some_resnet_magic;
 
 function do_crazy_shit() {
     censorListParagraphs = xhr.response;
@@ -42,9 +43,16 @@ function do_crazy_shit() {
 };
 
 function do_some_more_crazy_shit_with_photos_this_time() {
-    console.log(xhr_img);
     censorListImages = xhr_img.response;
+    for (var i = 0; i < imgList.length; i++) {
+        if(censorListImages[i]) {
+            blurrImage(images[i]);
+        }
+    }
+};
 
+function do_some_resnet_magic() {
+    censorListImages = xhr_resnet.response;
     for (var i = 0; i < imgList.length; i++) {
         if(censorListImages[i]) {
             blurrImage(images[i]);
@@ -62,6 +70,11 @@ xhr.open('POST', requestURL, true);
 xhr.responseType = 'json';
 xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 xhr.send(JSON.stringify(pList));
+
+xhr_resnet.open('POST', requestURL_resnet_imgs, true);
+xhr_resnet.responseType = 'json';
+xhr_resnet.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+xhr_resnet.send(JSON.stringify(imgList));
 
 function hide(elt) {
     elt.style['background-color'] = '#000000';

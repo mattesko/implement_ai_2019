@@ -6,13 +6,24 @@ from flask_cors import CORS
 from google_vision import google_visions
 import ast
 import numpy as np
+from resnet_utils import make_prediction
+
 
 app = Flask(__name__)
 CORS(app)
 
+
 @app.route('/')
 def default():
     return "You had me at hello"
+
+
+@app.route('/resnet', methods = ['POST'])
+def resnet():
+    sentences = (request.get_json())
+    preds = make_prediction(sentences)
+    print(preds)
+    return jsonify(preds)
 
 
 @app.route('/filter', methods = ['POST'])
@@ -21,8 +32,8 @@ def handle_filter():
     # do_censor = [get_filter_value(sent) for sent in sentences]
     do_censor = [True for _ in sentences]
 
-    for sentence, do_filter in zip(sentences, do_censor):
-        print(f'{sentence}:\n {str(do_filter)}')
+    # for sentence, do_filter in zip(sentences, do_censor):
+    #     print(f'{sentence}:\n {str(do_filter)}')
 
     return jsonify(do_censor)
 
