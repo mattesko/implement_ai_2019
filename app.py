@@ -4,6 +4,7 @@ from filters_utils import get_filter_value
 from functools import reduce
 from flask_cors import CORS
 
+
 app = Flask(__name__)
 CORS(app)
 
@@ -12,22 +13,19 @@ def default():
     return "You had me at hello"
 
 
-@app.route('/filter')
+@app.route('/filter', methods = ['POST'])
 def handle_filter():
-    sentences = _parse_html_sentences(request.args['block'])
-    # filters = [get_filter_value(sent) for sent in sentences]
-    filters = [True, False]
-    do_censor = reduce(lambda x, y: x and y, filters)
+    sentences = (request.get_json())
 
-    for sentence, do_filter in zip(sentences, filters):
-        print(f'{sentence}:\n {sentence}')
+    do_censor = [get_filter_value(sent) for sent in sentences]
+
+    for sentence, do_filter in zip(sentences, do_censor):
+        print(f'{sentence}:\n {str(do_filter)}')
 
     response = Response()
     response.headers['Do-Censor'] = [str(do_censor)]
     content = {"Do-Censor": [str(do_censor)]}
-
     return jsonify(content)
-
 
 def _parse_html_sentences(content):
     errors = []
