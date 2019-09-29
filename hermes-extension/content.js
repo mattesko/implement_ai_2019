@@ -4,7 +4,9 @@
 // Get all paragraphs and images in a webpage
 let paragraphs = document.getElementsByTagName('p');
 let images = document.getElementsByTagName('img');
-var done = "true";
+var done_nlp = "false";
+var done_cv = "false";
+var done = "false";
 
 // Create a request to send to the backend
 var requestURL = 'http://127.0.0.1:5000/filter';
@@ -36,6 +38,8 @@ for (var i = 0; i < pList.length; i++) {
 }
 
 function do_crazy_shit() {
+    console.log("start");
+
   // AI on content
     censorListParagraphs = xhr.response;
   // Unblur necessary
@@ -44,6 +48,15 @@ function do_crazy_shit() {
             un_blurr(paragraphs[i]);
         }
     }
+    console.log("hhhh");
+
+    done_nlp = "true";
+    if(done_cv == "true" && done_nlp == "false"){
+      done = "true";
+      chrome.runtime.sendMessage({status: done}, function(response) {
+          console.log(response.farewell);
+        });
+    }
 };
 
 for (var i = 0; i < imgList.length; i++) {
@@ -51,6 +64,8 @@ for (var i = 0; i < imgList.length; i++) {
 }
 
 function do_some_more_crazy_shit_with_photos_this_time() {
+    console.log("start");
+
     censorListImages = xhr_img.response;
 
     for (var i = 0; i < imgList.length; i++) {
@@ -58,7 +73,15 @@ function do_some_more_crazy_shit_with_photos_this_time() {
             un_blurrImage(images[i]);
         }
     }
+    console.log("dhsofhdskjh");
 
+    done_cv = "true";
+    if(done_cv == "true" && done_nlp == "false"){
+      done = "true";
+      chrome.runtime.sendMessage({status: done}, function(response) {
+          console.log(response.farewell);
+        });
+    }
 };
 
 xhr_img.open('POST', requestURL_fking_imgs, true);
@@ -103,8 +126,3 @@ function un_blurrImage(elt) {
     elt.style['filter'] = '';
     elt.style['-webkit-filter'] = '';
 }
-
-chrome.runtime.sendMessage({status: done}, function(response) {
-    console.log(response.farewell);
-  });
-
