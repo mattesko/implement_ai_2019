@@ -4,6 +4,7 @@
 // Get all paragraphs and images in a webpage
 let paragraphs = document.getElementsByTagName('p');
 let images = document.getElementsByTagName('img');
+var done = "true";
 
 // Create a request to send to the backend
 var requestURL = 'http://127.0.0.1:5000/filter';
@@ -102,3 +103,8 @@ function un_blurrImage(elt) {
     elt.style['filter'] = '';
     elt.style['-webkit-filter'] = '';
 }
+
+chrome.runtime.sendMessage({status: done}, function(response) {
+    console.log(response.farewell);
+  });
+

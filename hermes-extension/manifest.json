@@ -9,7 +9,12 @@
       "default_icon": "images/icon_16.png",
       "default_popup": "popup.html"
     },
-    
+    "permissions": [
+      "tabs"
+    ],
+    "background": {
+      "scripts": ["background.js"]
+    },
     "content_scripts": [
       {
         "matches": [
