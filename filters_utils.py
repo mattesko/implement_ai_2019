@@ -1,5 +1,5 @@
 import gensim
-from data.constants import sexy_words_list, violent_words_list, non_prod_words_list
+from data.constants import sexy_words_list, violent_words_list
 from scipy import spatial
 import numpy as np
 import os
@@ -25,3 +25,4 @@ def get_filter_value(text):
     #                     return True
 
     return False
+

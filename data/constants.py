@@ -9,5 +9,3 @@ violent_words_list = ["war", "attact", "punch", "robber", "knife", "gun", "hit",
                       "harm", "beating", "terrorist", "Warfare", "violence", "lacerate", "ravage",
                       "decimate", "sabotage", "Alert", "Ambush", "Ammunition", "terrorists","terrorism",
                       "attacks","bombing","qaeda","attack"]
-
-non_prod_words_list = ["game", "sex", "movie", "video", "playing", "dancing"]
