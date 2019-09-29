@@ -1,6 +1,7 @@
 from google.cloud import vision
 from google.cloud.vision import types
 import os
+from flask import jsonify
 
 
 def google_obj():
@@ -24,11 +25,16 @@ def google_visions(urls):
     obfuscate = []
     # For each url in the input list
     for url in urls:
+        print()
+        print(url)
         # Give it the url
         image.source.image_uri = url
         # Infer
         response = client.safe_search_detection(image=image)
+        print(response)
+
         safe = response.safe_search_annotation
+        print(safe)
         # If the content is not desirable
         if(safe.adult > 2 or safe.violence > 2 or safe.racy > 2):
             # Tell the client to obfuscate that image
@@ -36,7 +42,7 @@ def google_visions(urls):
         else:
             obfuscate.append(False)
 
-    return obfuscate
+    return jsonify(obfuscate)
 
 def google_batch(input_image_uri):
     client = google_obj()
